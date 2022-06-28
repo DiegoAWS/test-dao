@@ -51,11 +51,11 @@ contract DAO {
 
     mapping (uint => ProposalVote) private proposalVotes;
 
-    function votingDelay() public returns (uint256) {
+    function votingDelay() public pure returns (uint256) {
         return 1; // 1 block
     }
 
-    function votingPeriod() public returns (uint256) {
+    function votingPeriod() public pure returns (uint256) {
         return 5000;
     }
 
