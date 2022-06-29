@@ -63,8 +63,8 @@ jobs:
               python smartBugs.py --tool solhint --file $DIR/contracts/$sol
           done
          
-          cat results/maian/*/*/result.log # This should have logs.
-          if [ -z $(cat results/solhint/*/*/result.log) ] # This should be empty unless there are linter errors.
+          cat results/solhint/*/*/result.log # This should have logs.
+          if [ -s results/solhint/*/*/result.log ] # This should be empty unless there are linter errors.
           then
             exit 1
           else
