@@ -14,22 +14,22 @@ jobs:
       - name: Check out source code
         uses: actions/checkout@v2
 
-      - name: Set up NodeJS
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+      # - name: Set up NodeJS
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: '14'
 
-      - name: Show NodeJS version
-        run: npm --version
+      # - name: Show NodeJS version
+      #   run: npm --version
 
-      - name: Install Truffle
-        run: npm install truffle -g
+      # - name: Install Truffle
+      #   run: npm install truffle -g
 
-      - name: Install Truffle dependencies
-        run: npm install
+      # - name: Install Truffle dependencies
+      #   run: npm install
 
-      - name: Run Truffle test with CI=true for codechecks
-        run: CI=true truffle test
+      # - name: Run Truffle test with CI=true for codechecks
+      #   run: CI=true truffle test
 
 #      - name: Run test coverage
 #        run: truffle run coverage
@@ -63,10 +63,9 @@ jobs:
               python smartBugs.py --tool solhint --file $DIR/contracts/$sol
           done
          
-          cat results/maian/*/*/result.log # This should have logs.
+          cat results/solhint/*/*/result.log # This should have logs.
           if [ -z $(cat results/solhint/*/*/result.log) ] # This should be empty unless there are linter errors.
           then
-            cat results/solhint/*/*/result.log # Log the error file to workflow logs
             exit 1
           else
             exit 0
