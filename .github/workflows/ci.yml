@@ -66,6 +66,7 @@ jobs:
           cat results/maian/*/*/result.log # This should have logs.
           if [ -z $(cat results/solhint/*/*/result.log) ] # This should be empty unless there are linter errors.
           then
+            cat results/solhint/*/*/result.log # Log the error file to workflow logs
             exit 1
           else
             exit 0
