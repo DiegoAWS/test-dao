@@ -9,6 +9,8 @@ contract DAO {
 
     // FIXME: Use proper addresses.
     address[] public VOTERS = [
+    0x80cB3d5ad7782Bdb26d01b5C167973ecF895013F, // Ganache Address #0
+
     0x1a1A1A1A1a1A1A1a1A1a1a1a1a1a1a1A1A1a1a1a,
     0x2A2a2a2a2a2A2A2a2a2a2A2a2A2A2A2a2A2A2a2a,
     0x3A3a3A3a3A3A3a3A3a3A3a3A3a3a3A3a3A3a3a3a,
@@ -30,6 +32,7 @@ contract DAO {
         Done
     }
     uint256 counter; // Incremental counter for proposal IDs.
+
     struct Proposal {
         uint256 id; // Unique ID for the proposal.
         string description; // Description of the proposal.
@@ -51,6 +54,15 @@ contract DAO {
 
     mapping (uint => ProposalVote) private proposalVotes;
 
+    function checkUsersIsInVoters(address _user) public view returns (bool) {
+        for (uint i = 0; i < VOTERS.length; i++) {
+            if (VOTERS[i] == _user) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function votingDelay() public pure returns (uint256) {
         return 1; // 1 block
     }
@@ -59,8 +71,15 @@ contract DAO {
         return 5000;
     }
 
+    function getSender() public view returns (address) {
+        return msg.sender;
+    }
+
     // FIXME: We assume that file was written on IPFS and the proposal is created with its hash.
-    function propose(string calldata hash, string calldata description) private {
+    function propose(string calldata hash, string calldata description) public {
+
+        require(checkUsersIsInVoters(msg.sender), "You are not an authorized user.");
+
         uint256 id = counter++;
 
         uint256 startBlock = block.number + votingDelay();
@@ -83,6 +102,9 @@ contract DAO {
     // FIXME: Make the vote function not public but require certain privileges.
     function vote(address voterAddr, uint256 pID, VoteType voteType) private {
         // FIXME: This already changes the state, so how to make it so that it's executeVote that does the writing?
+
+        require(checkUsersIsInVoters(msg.sender), "You are not an authorized user.");
+
         proposalVotes[pID].voted[voterAddr] = true;
 
         if (voteType == VoteType.Abstain) {
